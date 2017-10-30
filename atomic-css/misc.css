@@ -1,0 +1,44 @@
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: avenir next, avenir, helvetica, ubuntu, roboto, arial, sans-serif;
+}
+
+.card-img {
+  position: relative;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+
+.card-img img {
+  bottom: 0;
+  height: auto;
+  left: 0;
+  margin: auto;
+  max-height: 75%;
+  max-width: 75%;
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+  line-height: 1.5;
+  margin: 0;
+  color: #111;
+  background-color: #fff;
+}
+a {
+  color: #07c;
+}

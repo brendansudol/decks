@@ -1,0 +1,312 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Not Hotdog :: PyGotham</title>
+  <link rel="stylesheet" href="../_shared/css/reveal.css">
+  <link rel="stylesheet" href="../_shared/css/theme.css">
+  <link rel="stylesheet" href="misc.css">
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section class="center">
+        <h1 class="mb1 h2 tc">Build your own “not hotdog”<br>deep learning model</h1>
+      </section>
+
+      <section>
+        <h2>Introductions</h2>
+        <div class="clearfix mxn2">
+          <div class="col col-8 px2">
+            <p>I’m Brendan.</p>
+            <p>I was on the data team at <a href="https://www.etsy.com/">Etsy</a>. I’m currently a software developer at <a href="https://18f.gsa.gov/">18F</a>.</p>
+            <p>I also like my fair share of raunchy TV comedies.</p>
+          </div>
+          <div class="col col-4 px2">
+            <img src="../_shared/img/me.png">
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-col-11 mx-auto">
+          <img class="col-12" src="img/sv-clip-1.png">
+          <a class="block h6 underline" href="https://youtu.be/ACmydtFDTGs" target="_blank">YouTube »</a>
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-col-11 mx-auto">
+          <img class="col-12" src="img/sv-clip-2.png">
+          <a class="block h6 underline" href="https://youtu.be/ACmydtFDTGs" target="_blank">YouTube »</a>
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-col-11 mx-auto">
+          <img class="col-12" src="img/sv-clip-3.png">
+          <a class="block h6 underline" href="https://youtu.be/ACmydtFDTGs" target="_blank">YouTube »</a>
+        </div>
+      </section>
+
+      <section>
+        <div class="sm-col-11 mx-auto">
+          <img class="col-12" src="img/sv-clip-4.png">
+          <a class="block h6 underline" href="https://youtu.be/ACmydtFDTGs" target="_blank">YouTube »</a>
+        </div>
+      </section>
+
+      <section class="center">
+        <h2>Goals & Expectations</h2>
+      </section>
+
+      <section>
+        <h2>Image Classification</h2>
+        <p>Input: image<br>Output: a label (i.e., cat, dog, hotdog) or probabilities across labels</p>
+        <img class="col-8" src="img/cnn-in-action.gif">
+      </section>
+
+      <section>
+        <h2>Why it’s tricky for computers</h2>
+        <div class="col-8 flex items-center justify-center">
+          <img class="p1 col-6" src="img/bball-players.jpg">
+          <img class="p1 col-6" src="img/peek-pugs.jpg">
+        </div>
+      </section>
+
+      <section>
+        <h2>Supervised learning</h2>
+        <div class="sm-col-10">
+          <p>We give an algorithm a dataset that includes the right answers <strong>(a training set)</strong> and it learns a function that approximates the data.</p>
+          <p>After that, it can make predictions on new (but similar) data that it’s never seen.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>What’s the right tool?</h2>
+        <p>Convolutional Neural Networks 💥</p>
+        <img class="mb3 col-12" src="img/banana.jpeg">
+        <p>But first, let’s go over neural nets...</p>
+      </section>
+
+      <section>
+        <h2>Neural networks primer</h2>
+        <div class="my3">
+          <img class="col-6" src="img/neuron.png">
+        </div>
+        <pre><code class="python">
+  def unit(inputs, weights, bias):
+      return activation_function(np.dot(inputs, weights) + bias)
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Neural networks primer</h2>
+        <div class="my3">
+          <img src="img/output-to-input.png">
+        </div>
+      </section>
+
+      <section>
+        <h2>Neural networks primer</h2>
+        <div class="my3">
+          <img class="col-7" src="img/neural-network.png">
+        </div>
+      </section>
+
+      <section>
+        <h2>Neural networks primer</h2>
+        <div class="my3">
+          <img class="col-7" src="img/backprop-slope.png">
+        </div>
+      </section>
+
+      <section>
+        <h2>Convolutional neural networks</h2>
+        <p>aka ConvNets aka CNNs</p>
+        <p>A powerful hammer for computer vision nails</p>
+        <p>Very similar to ordinary neural nets but with an architecture better suited to handle image inputs</p>
+      </section>
+
+      <section>
+        <h2 class="sm-col-9">To a computer, an image is just a bunch of numbers</h2>
+        <div class="flex items-center justify-center md-col-10 mxn2">
+          <img class="p2 col-5 border-box" src="img/8-gif.gif">
+          <img class="p2 col-7 border-box" src="img/rgb-numbers.png">
+        </div>
+      </section>
+
+      <section>
+        <h2>Convolutional neural networks</h2>
+        <p class="mt2 mb1">3 main pieces:</p>
+        <ul>
+          <li><strong>convolutional</strong> layers</li>
+          <li><strong>pooling</strong> layers</li>
+          <li>a final fully-connected softmax layer</li>
+        </ul>
+        <img class="mt1 col-9" src="img/cnn-ex.png">
+      </section>
+
+      <section>
+        <h2>Convolutional layer</h2>
+        <p class="m0 h5">We take small <strong>filters</strong> and <strong>slide</strong> them over the image spatially. Different filters respond to different things in the image. Some may like edges, others may prefer yellow regions, etc.</p>
+        <div class="col-8 flex items-center justify-center mxn2">
+          <img class="p2 col-5 border-box" src="img/conv-animate.gif">
+          <img class="p2 col-7 border-box" src="img/conv-animate2.gif">
+        </div>
+      </section>
+
+      <section>
+        <h2>Convolution math</h2>
+        <img class="col-9" src="img/convlayer-ex.png">
+      </section>
+
+      <section>
+        <h2>Learned convolution features</h2>
+        <img class="mt3 col-10" src="img/cnn-features.jpeg">
+      </section>
+
+      <section>
+        <h2>Pooling layer</h2>
+        <img class="mt2 col-9" src="img/pool.png">
+      </section>
+
+      <section>
+        <h2>ConvNet, all together</h2>
+        <img class="mt3 col-12" src="img/cnn-ex.png">
+      </section>
+
+      <section>
+        <h2>Keras</h2>
+        <div class="sm-col-9">
+          <p>A high-level neural network library, written in Python</p>
+          <p>Wraps an API similar to <code class="italic">scikit-learn</code> around the Theano or TensorFlow backend.</p>
+          <p>Modular and user friendly -- easy to construct new models and/or leverage pretrained ones</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Pretrained CNN</h2>
+        <p class="mb1 sm-col-9"><strong>VGG16</strong> -- a 16 layer ConvNet trained on ImageNet data, ~140M parameters, runner-up in 2014</p>
+        <div class="clearfix mxn1">
+          <div class="col col-8 px1">
+            <pre><code class="python" data-trim>
+vgg = keras.applications.VGG16(weights="imagenet", include_top=True)
+
+img = get_image("kitty.jpg")
+predictions = vgg.predict(img)
+
+for p in decode_predictions(predictions)[0]:
+    print("✨ {} (prob = {:0.3f})".format(p[1], p[2]))
+            </code></pre>
+          </div>
+          <div class="col col-4 px1">
+            <pre><code class="text" data-trim>
+✨ Egyptian_cat (prob = 0.213)
+✨ kit_fox (prob = 0.213)
+✨ tabby (prob = 0.138)
+✨ red_fox (prob = 0.107)
+✨ tiger_cat (prob = 0.098)
+            </code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Transfer learning</h2>
+        <div class="sm-col-10">
+          <p>In general, this refers to the process of leveraging the knowledge learned in one model for the training of another model.</p>
+          <p>More specifically, we’ll load a state-of-the-art model (VGG16), sub out the last classifier layer, and use the rest of the ConvNet as a fixed feature extractor for our new dataset.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Transfer learning</h2>
+        <pre><code class="python" style="font-size:.8em" data-trim>
+# new softmax layer with number of classes in our dataset
+new_classification_layer = Dense(num_classes, activation="softmax")
+
+# connect new layer to the second to last layer in VGG, and make ref to it
+out = new_classification_layer(vgg.layers[-2].output)
+
+# create new network between VGG’s input layer and (new) output
+model_new = Model(vgg.input, out)
+
+# make all layers (except last) untrainable by freezing weights
+for layer in model_new.layers[:-1]:
+    layer.trainable = False
+
+# ensure the last layer is trainable (not frozen)
+model_new.layers[-1].trainable = True
+
+# compile and fit model
+model_new.compile(loss="categorical_crossentropy", optimizer="adadelta", metrics=["accuracy"])
+model_new.fit(x_train, y_train, batch_size=128, epochs=50, validation_data=(x_val, y_val))
+        </code></pre>
+        <p><a class="h6 underline" href="https://github.com/brendansudol/pygotham-code/blob/master/convnets.ipynb" target="_blank">Jupyter notebook »</a></p>
+      </section>
+
+      <section>
+        <h2>Additional resources</h2>
+        <p>Stanford’s Convolutional Neural Networks for Visual Recognition <a href="http://cs231n.github.io/">course notes</a></p>
+        <p><a href="http://course.fast.ai/">Practical Deep Learning For Coders</a> (by fast.ai)</p>
+        <p>Kera’s <a href="https://blog.keras.io/">blog</a>, specifically <a href="https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">this post</a></p>
+        <p><a href="http://ml4a.github.io/guides/">Machine Learning for Artists</a></p>
+      </section>
+
+      <section>
+        <h2>One day or day one...</h2>
+        <p>#1 suggestion (if I may) -- get your hands dirty with a toy project and fill in the gaps in your knowledge along the way.</p>
+        <blockquote class="mt4">
+          <p>The secret of getting ahead is getting started.</p>
+          <footer>Mark Twain</footer>
+        </blockquote>
+      </section>
+
+      <section class="center">
+        <h2>Thanks!</h2>
+        <p class="py2">
+          <a class="underline" href="https://github.com/brendansudol/pygotham-code">Code</a> / <a class="underline" href="https://github.com/brendansudol/pygotham-deck">Slides</a> / <a class="underline" href="https://twitter.com/brensudol">Me</a>
+        </p>
+        <img src="../_shared/img/peace-emoji.gif" alt="thanks!" width="150" height="150">
+      </section>
+    </div>
+
+    <div class="nav-controls sans-serif">
+      <button class="btn btn-icon p0 navigate-left">
+        <svg class="icon" data-icon="left" viewBox="0 0 32 32" fill="#000">
+          <path d="M20 1 L24 5 L14 16 L24 27 L20 31 L6 16 z"></path>
+        </svg>
+      </button>
+      <button class="btn btn-icon p0 navigate-right">
+        <svg class="icon" data-icon="right" viewBox="0 0 32 32" fill="#000">
+          <path d="M12 1 L26 16 L12 31 L8 27 L18 16 L8 5 z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="../_shared/js/head.js"></script>
+  <script src="../_shared/js/reveal.js"></script>
+  <script>
+  Reveal.initialize({
+    center: false,
+    controls: false,
+    history: true,
+    slideNumber: false,
+    transition: "none",
+    width: 1200,
+    dependencies: [{
+      src: "../_shared/js/highlight.js",
+      async: true,
+      callback: () => hljs.initHighlightingOnLoad()
+    }]
+  });
+  </script>
+</body>
+
+</html>
